@@ -1,8 +1,24 @@
 require 'hash_map/version'
 require 'active_support/all'
 module HashMap
-  def self.root
-    File.expand_path '../..', __FILE__
+  class << self
+    attr_accessor :configuration
+
+    def configure
+      self.configuration ||= Configuration.new
+      yield(configuration)
+    end
+
+    def root
+      File.expand_path '../..', __FILE__
+    end
+
+    class Configuration
+      attr_accessor :middlewares
+      def initialize
+        @middlewares = {}
+      end
+    end
   end
 end
 require 'hash_map/dsl'

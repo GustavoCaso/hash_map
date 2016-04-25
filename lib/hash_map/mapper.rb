@@ -12,7 +12,11 @@ module HashMap
         value = get_value(struc)
         new_hash.deep_merge! build_keys(struc[:key], value)
       end
-      new_hash
+      if wrapper = HashMap.configuration.middlewares[:after_map].new(new_hash).call
+        wrapper
+      else
+        new_hash
+      end
     end
 
     private
